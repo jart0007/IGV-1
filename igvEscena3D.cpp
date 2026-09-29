@@ -136,10 +136,12 @@ void igvEscena3D::hacerPrismaRampa(float ancho, float alto, float largo) //largo
 }
 
 /**
- * @brief funcion
+ * @brief crea un raton de ordenador antiguo en la ventana de visualización
+ * @note ¿a que mola?
  */
-void igvEscena3D::renderObjeto1() //todo DUDA: glutSwapBuffers() y glFlush() QUE HACEN Y DIFERENCIAS
-{   GLfloat gris[] = {0.2, 0.2, 0.2}; //< vector de color RGB (se puede poner 4 elemento para transparencia)
+void igvEscena3D::crearRaton()
+{
+    GLfloat gris[] = {0.2, 0.2, 0.2}; //< vector de color RGB (se puede poner 4 elemento para transparencia)
     GLfloat gris_oscuro[] = {0.01,0.01,0.01};
 
     glMaterialfv(GL_FRONT, GL_EMISSION, gris);
@@ -177,6 +179,29 @@ void igvEscena3D::renderObjeto1() //todo DUDA: glutSwapBuffers() y glFlush() QUE
 
     glPopMatrix();
 
+    //botones
+
+    glMaterialfv(GL_FRONT, GL_EMISSION, gris_oscuro);
+    glPushMatrix();
+    glTranslatef(0.25,0.30,1);
+    glRotatef(-60,1,0,0);
+    glScalef(0.75,1.25,1);
+    glutSolidCube(0.5);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.25,0.30,1);
+    glRotatef(-60,1,0,0);
+    glScalef(0.75,1.25,1);
+    glutSolidCube(0.5);
+    glPopMatrix();
+}
+/**
+ * @brief funcion que renderiza el primer objeto / primera opcion del menú
+ */
+void igvEscena3D::renderObjeto1() 
+{
+    crearRaton();
 }
 
 void igvEscena3D::renderObjeto2()
