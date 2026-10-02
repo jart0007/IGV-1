@@ -86,28 +86,27 @@ void igvEscena3D::visualizar(int objeto)
     {
         glPushMatrix();
 
-        //traslaciones
-        glTranslatef(obj[i].tx, obj[i].ty, obj[i].tz);
+            //traslaciones
+            glTranslatef(obj[i].tx, obj[i].ty, obj[i].tz);
 
-        //escalados (es uniforme, asi se explica en el ejemplo del pdf)
-        glScalef(obj[i].s, obj[i].s, obj[i].s);
+            //escalados (es uniforme, asi se explica en el ejemplo del pdf)
+            glScalef(obj[i].s, obj[i].s, obj[i].s);
 
-        //rotaciones
-        glRotatef(obj[i].rx,1,0,0);
-        glRotatef(obj[i].ry,0,1,0);
-        glRotatef(obj[i].rz,0,0,1);
+            //rotaciones
+            glRotatef(obj[i].rx,1,0,0);
+            glRotatef(obj[i].ry,0,1,0);
+            glRotatef(obj[i].rz,0,0,1);
 
-        //solo queda dibujar el objeto y el pop()
+            //solo queda dibujar el objeto y el pop()
 
-        switch (i)
-        {
-            case 0: renderObjeto1(); break;
-            case 1: renderObjeto2(); break;
-            case 2: renderObjeto3(); break;
-        }
+            switch (i)
+            {
+                case 0: renderObjeto1(); break;
+                case 1: renderObjeto2(); break;
+                case 2: renderObjeto3(); break;
+            }
 
         glPopMatrix();
-
     }
 }
 

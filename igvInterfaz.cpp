@@ -132,6 +132,28 @@ void igvInterfaz::keyboardFunc(unsigned char key, int x, int y)
 }
 
 /**
+ * Método de control de eventos de teclas especiales, no sirve el metodo de arriba por que algunas teclas no tienen ASCII
+ * @param key Código de la tecla pulsada
+ * @param x Coordenada X de la posición del cursor del ratón en el momento del
+ *          evento de teclado
+ * @param y Coordenada Y de la posición del cursor del ratón en el momento del
+ *          evento de teclado
+ * @pre Se asume que todos los parámetros tienen valores válidos
+ * @post Los atributos de la clase pueden cambiar, dependiendo de la tecla pulsada
+ */
+void igvInterfaz::specialFunc(int key, int x, int y)
+{
+    switch (key)
+    {
+    case GLUT_KEY_LEFT:
+        _instancia->escena.trasladar(-0.5,0,0); break;
+    case GLUT_KEY_RIGHT:
+        _instancia->escena.trasladar(0.5,0,0); break;
+    }
+    glutPostRedisplay(); // renueva el contenido de la ventana de vision y redibuja la escena
+}
+
+/**
  * Método que define la cámara de visión y el viewport. Se llama automáticamente
  * cuando se cambia el tamaño de la ventana.
  * @param w Nuevo ancho de la ventana
@@ -174,6 +196,7 @@ void igvInterfaz::inicializa_callbacks()
     glutKeyboardFunc(keyboardFunc);
     glutReshapeFunc(reshapeFunc);
     glutDisplayFunc(displayFunc);
+    glutSpecialFunc(specialFunc);
 }
 
 

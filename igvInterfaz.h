@@ -64,6 +64,7 @@ public:
     static void reshapeFunc(int w, int h); // método que define la camara de vision y el viewport
     // se llama automáticamente cuando se cambia el tamaño de la ventana
     static void displayFunc(); // método para visualizar la escena
+    static void specialFunc(int key, int x, int y); //método para control de eventos especiales (NO ASCII)
 
 
     // Métodos
