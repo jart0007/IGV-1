@@ -21,9 +21,6 @@ public:
     const int Objeto2 = 2; ///< Identificador interno del objeto 2
     const int Objeto3 = 3; ///< Identificador interno del objeto 3
 
-    const char* Nombre_EscenaA = "Escena A"; ///< Etiquetas que aparecen en el menú
-    const char* Nombre_EscenaB = "Escena B";
-    const char* Nombre_EscenaC = "Escena C";
 private:
     // Atributos
     bool ejes = true; ///< Indica si hay que dibujar los _ejes coordenados o no

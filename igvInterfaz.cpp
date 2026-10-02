@@ -71,8 +71,6 @@ void igvInterfaz::configura_entorno ( int argc, char **argv, int _ancho_ventana
    glutInitWindowPosition ( _pos_X, _pos_Y );
    glutCreateWindow ( _titulo.c_str () );
 
-   create_menu();
-
    glEnable ( GL_DEPTH_TEST ); // activa el ocultamiento de superficies por z-buffer
    glClearColor ( 1.0, 1.0, 1.0, 0.0 ); // establece el color de fondo de la ventana
 
@@ -82,18 +80,7 @@ void igvInterfaz::configura_entorno ( int argc, char **argv, int _ancho_ventana
    crear_mundo (); // crea el mundo a visualizar en la ventana
 }
 
-void igvInterfaz::create_menu()
-{
-   int menu_id = glutCreateMenu(menuHandle);
-   glutAddMenuEntry(_instancia->escena.Nombre_EscenaA
-                    , _instancia->escena.Objeto1);
-   glutAddMenuEntry(_instancia->escena.Nombre_EscenaB
-                    , _instancia->escena.Objeto2);
-   glutAddMenuEntry(_instancia->escena.Nombre_EscenaC
-                    , _instancia->escena.Objeto3);
 
-   glutAttachMenu(GLUT_RIGHT_BUTTON);
-}
 
 /**
  * Método para visualizar la escena y esperar a eventos sobre la interfaz
@@ -197,17 +184,6 @@ void igvInterfaz::inicializa_callbacks ()
    glutDisplayFunc ( displayFunc );
 }
 
-/**
- * Método para gestionar la selección de opciones de menú
- * @param value Nueva opción seleccionada
- * @pre Se asume que el valor del parámetro es correcto
- * @post Se almacena en el objeto la opción seleccionada
- */
-void igvInterfaz::menuHandle(int value)
-{
-   _instancia->menuSelection = value;
-   glutPostRedisplay(); // renew the content of the window
-}
 
 /**
  * Método para consultar el ancho de la ventana de visualización

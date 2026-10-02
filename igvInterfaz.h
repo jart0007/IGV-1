@@ -64,7 +64,6 @@ public:
     static void reshapeFunc(int w, int h); // método que define la camara de vision y el viewport
     // se llama automáticamente cuando se cambia el tamaño de la ventana
     static void displayFunc(); // método para visualizar la escena
-    static void menuHandle(int value); // método para gestionar la selección de opciones de menú
 
 
     // Métodos
@@ -77,7 +76,6 @@ public:
                            , int _pos_X, int _pos_Y // posición inicial de la ventana de visualización
                            , std::string _titulo // título de la ventana de visualización
     );
-    void create_menu();
 
     void inicializa_callbacks(); // inicializa todos los callbacks
 

@@ -56,18 +56,18 @@ void igvEscena3D::visualizar(int objeto)
 
     // se pintan los objetos de la escena
 
-    switch (objeto)
-    {
-    case 1:
-        renderObjeto1();
-        break;
-    case 2:
-        renderObjeto2();
-        break;
-    case 3:
-        renderObjeto3();
-        break;
-    }
+    glPushMatrix();
+    glTranslatef(2,0,2);
+    renderObjeto1();
+    glPopMatrix();
+
+    renderObjeto3();
+
+
+    glPushMatrix();
+    glTranslatef(-4,0,-4);
+    renderObjeto2();
+    glPopMatrix();
 
 
     glPopMatrix(); // restaura la matriz de modelado
@@ -211,7 +211,7 @@ void igvEscena3D::renderObjeto2()
 
 void igvEscena3D::renderObjeto3()
 {
-    glutSolidCube(3);
+    glutSolidSphere(1,10,10);
 }
 
 
