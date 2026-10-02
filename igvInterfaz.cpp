@@ -6,11 +6,6 @@
 igvInterfaz* igvInterfaz::_instancia = nullptr;
 
 
-igvInterfaz::igvInterfaz() : menuSelection(escena.Objeto1)
-{
-}
-
-
 // Métodos públicos ----------------------------------------
 
 /**
@@ -18,28 +13,31 @@ igvInterfaz::igvInterfaz() : menuSelection(escena.Objeto1)
  * diseño Singleton
  * @return Una referencia al objeto único de la clase
  */
-igvInterfaz& igvInterfaz::getInstancia ()
-{  if ( !_instancia )
-   {  _instancia = new igvInterfaz;
-   }
+igvInterfaz& igvInterfaz::getInstancia()
+{
+    if (!_instancia)
+    {
+        _instancia = new igvInterfaz;
+    }
 
-   return *_instancia;
+    return *_instancia;
 }
 
 /**
  * Crea el mundo que se visualiza en la ventana
  */
-void igvInterfaz::crear_mundo ()
-{  // r tiene valor por defecto (0,0,0)
-   // crear cámaras
-   p0 = igvPunto3D ( 3.0, 2.0, 4 );
-   r = igvPunto3D ( 0, 0, 0 );
-   V = igvPunto3D ( 0, 1.0, 0 );
+void igvInterfaz::crear_mundo()
+{
+    // r tiene valor por defecto (0,0,0)
+    // crear cámaras
+    p0 = igvPunto3D(3.0, 2.0, 4);
+    r = igvPunto3D(0, 0, 0);
+    V = igvPunto3D(0, 1.0, 0);
 
-   _instancia->camara.set ( IGV_PARALELA, p0, r, V, -1 * 3, 1 * 3, -1 * 3, 1 * 3, 1, 200 );
+    _instancia->camara.set(IGV_PARALELA, p0, r, V, -1 * 3, 1 * 3, -1 * 3, 1 * 3, 1, 200);
 
-   // Las cámaras se han creado con valores por defecto de 60 grados de apertura
-   // y ratio de aspecto 1
+    // Las cámaras se han creado con valores por defecto de 60 grados de apertura
+    // y ratio de aspecto 1
 }
 
 /**
@@ -57,36 +55,37 @@ void igvInterfaz::crear_mundo ()
  * @pre Se asume que todos los parámetros tienen valores válidos
  * @post Cambia el alto y ancho de ventana almacenado en el objeto
  */
-void igvInterfaz::configura_entorno ( int argc, char **argv, int _ancho_ventana
-                                      , int _alto_ventana, int _pos_X, int _pos_Y
-                                      , std::string _titulo )
-{  // inicialización de los atributos de la interfaz
-   ancho_ventana = _ancho_ventana;
-   alto_ventana = _alto_ventana;
+void igvInterfaz::configura_entorno(int argc, char** argv, int _ancho_ventana
+                                    , int _alto_ventana, int _pos_X, int _pos_Y
+                                    , std::string _titulo)
+{
+    // inicialización de los atributos de la interfaz
+    ancho_ventana = _ancho_ventana;
+    alto_ventana = _alto_ventana;
 
-   // inicialización de la ventana de visualización
-   glutInit ( &argc, argv );
-   glutInitDisplayMode ( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH );
-   glutInitWindowSize ( _ancho_ventana, _alto_ventana );
-   glutInitWindowPosition ( _pos_X, _pos_Y );
-   glutCreateWindow ( _titulo.c_str () );
+    // inicialización de la ventana de visualización
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+    glutInitWindowSize(_ancho_ventana, _alto_ventana);
+    glutInitWindowPosition(_pos_X, _pos_Y);
+    glutCreateWindow(_titulo.c_str());
 
-   glEnable ( GL_DEPTH_TEST ); // activa el ocultamiento de superficies por z-buffer
-   glClearColor ( 1.0, 1.0, 1.0, 0.0 ); // establece el color de fondo de la ventana
+    glEnable(GL_DEPTH_TEST); // activa el ocultamiento de superficies por z-buffer
+    glClearColor(1.0, 1.0, 1.0, 0.0); // establece el color de fondo de la ventana
 
-   glEnable ( GL_LIGHTING ); // activa la iluminacion de la escena
-   glEnable ( GL_NORMALIZE ); // normaliza los vectores normales para calculo iluminacion
+    glEnable(GL_LIGHTING); // activa la iluminacion de la escena
+    glEnable(GL_NORMALIZE); // normaliza los vectores normales para calculo iluminacion
 
-   crear_mundo (); // crea el mundo a visualizar en la ventana
+    crear_mundo(); // crea el mundo a visualizar en la ventana
 }
-
 
 
 /**
  * Método para visualizar la escena y esperar a eventos sobre la interfaz
  */
-void igvInterfaz::inicia_bucle_visualizacion ()
-{  glutMainLoop (); // inicia el bucle de visualización de GLUT
+void igvInterfaz::inicia_bucle_visualizacion()
+{
+    glutMainLoop(); // inicia el bucle de visualización de GLUT
 }
 
 /**
@@ -99,47 +98,37 @@ void igvInterfaz::inicia_bucle_visualizacion ()
  * @pre Se asume que todos los parámetros tienen valores válidos
  * @post Los atributos de la clase pueden cambiar, dependiendo de la tecla pulsada
  */
-void igvInterfaz::keyboardFunc ( unsigned char key, int x, int y )
-{  /* IMPORTANTE: en la implementación de este método hay que cambiar convenientemente el estado
-      de los objetos de la aplicación, pero no hacer llamadas directas a funciones de OpenGL */
+void igvInterfaz::keyboardFunc(unsigned char key, int x, int y)
+{
+    /* IMPORTANTE: en la implementación de este método hay que cambiar convenientemente el estado
+        de los objetos de la aplicación, pero no hacer llamadas directas a funciones de OpenGL */
 
-   switch ( key )
-   {  case 'p': // TODO: cambia el tipo de proyección de paralela a perspectiva y viceversa
+    switch (key)
+    {
+    case 'e': // activa/desactiva la visualización de los ejes
+    case 'E':
+        _instancia->escena.set_ejes(!_instancia->escena.get_ejes());
+        break;
+    case 27: // tecla de escape para SALIR
+        exit(1);
+        break;
 
-         break;
-      case 'P': // TODO: cambia el tipo de proyección de paralela a perspectiva y viceversa
+    //practica 1: transformaciones geometricas
+    case '1':
+    case '2':
+    case '3':
+        _instancia->escena.set_seleccionado(key - '1'); ///<- "key" es ASCII, le resto "1" para transformalo
+        break;
+    case 'u': // Traslacion en Y positiva
+        _instancia->escena.trasladar(0,0.5,0);
+        break;
+    case 'U': // Traslacion en Y negativa
+        _instancia->escena.trasladar(0,-0.5,0);
+        break;
 
-         break;
-      case 'v': // TODO: cambia la posición de la cámara para mostrar las vistas planta, perfil, alzado o perspectiva
 
-         break;
-      case 'V': // TODO: cambia la posición de la cámara para mostrar las vistas planta, perfil, alzado o perspectiva
-
-         break;
-      case '+': // TODO: zoom in
-
-         break;
-      case '-': // TODO: zoom out
-
-         break;
-      case 'n': // TODO: incrementar la distancia del plano cercano
-
-         break;
-      case 'N': // TODO: decrementar la distancia del plano cercano
-
-         break;
-      case '4': // TODO: dividir la ventana  en cuatro vistas
-
-         break;
-      case 'e': // activa/desactiva la visualización de los ejes
-      case 'E':
-         _instancia->escena.set_ejes ( !_instancia->escena.get_ejes () );
-         break;
-      case 27: // tecla de escape para SALIR
-         exit ( 1 );
-         break;
-   }
-   glutPostRedisplay (); // renueva el contenido de la ventana de vision y redibuja la escena
+    }
+    glutPostRedisplay(); // renueva el contenido de la ventana de vision y redibuja la escena
 }
 
 /**
@@ -149,39 +138,42 @@ void igvInterfaz::keyboardFunc ( unsigned char key, int x, int y )
  * @param h Nuevo alto de la ventana
  * @pre Se asume que todos los parámetros tienen valores válidos
  */
-void igvInterfaz::reshapeFunc ( int w, int h )
-{  // dimensiona el viewport al nuevo ancho y alto de la ventana
-   // guardamos valores nuevos de la ventana de visualizacion
-   _instancia->set_ancho_ventana ( w );
-   _instancia->set_alto_ventana ( h );
+void igvInterfaz::reshapeFunc(int w, int h)
+{
+    // dimensiona el viewport al nuevo ancho y alto de la ventana
+    // guardamos valores nuevos de la ventana de visualizacion
+    _instancia->set_ancho_ventana(w);
+    _instancia->set_alto_ventana(h);
 
-   // establece los parámetros de la cámara y de la proyección
-   _instancia->camara.aplicar ();
+    // establece los parámetros de la cámara y de la proyección
+    _instancia->camara.aplicar();
 }
 
 /**
  * Método para visualizar la escena
  */
-void igvInterfaz::displayFunc ()
-{  glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // borra la ventana y el Z-buffer
+void igvInterfaz::displayFunc()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // borra la ventana y el Z-buffer
 
-   // se establece el viewport
-   glViewport ( 0, 0, _instancia->get_ancho_ventana (), _instancia->get_alto_ventana () );
+    // se establece el viewport
+    glViewport(0, 0, _instancia->get_ancho_ventana(), _instancia->get_alto_ventana());
 
-   //visualiza la escena
-   _instancia->escena.visualizar(_instancia->menuSelection);
+    //visualiza la escena
+    _instancia->escena.visualizar(_instancia->menuSelection);
 
-   // refresca la ventana
-   glutSwapBuffers (); // se utiliza, en vez de glFlush(), para evitar el parpadeo
+    // refresca la ventana
+    glutSwapBuffers(); // se utiliza, en vez de glFlush(), para evitar el parpadeo
 }
 
 /**
  * Método para inicializar los callbacks GLUT
  */
-void igvInterfaz::inicializa_callbacks ()
-{  glutKeyboardFunc ( keyboardFunc );
-   glutReshapeFunc ( reshapeFunc );
-   glutDisplayFunc ( displayFunc );
+void igvInterfaz::inicializa_callbacks()
+{
+    glutKeyboardFunc(keyboardFunc);
+    glutReshapeFunc(reshapeFunc);
+    glutDisplayFunc(displayFunc);
 }
 
 
@@ -189,16 +181,18 @@ void igvInterfaz::inicializa_callbacks ()
  * Método para consultar el ancho de la ventana de visualización
  * @return El valor almacenado como ancho de la ventana de visualización
  */
-int igvInterfaz::get_ancho_ventana ()
-{  return ancho_ventana;
+int igvInterfaz::get_ancho_ventana()
+{
+    return ancho_ventana;
 }
 
 /**
  * Método para consultar el alto de la ventana de visualización
  * @return El valor almacenado como alto de la ventana de visualización
  */
-int igvInterfaz::get_alto_ventana ()
-{  return alto_ventana;
+int igvInterfaz::get_alto_ventana()
+{
+    return alto_ventana;
 }
 
 /**
@@ -207,8 +201,9 @@ int igvInterfaz::get_alto_ventana ()
  * @pre Se asume que el parámetro tiene un valor válido
  * @post El ancho de ventana almacenado en la aplicación cambia al nuevo valor
  */
-void igvInterfaz::set_ancho_ventana ( int _ancho_ventana )
-{  ancho_ventana = _ancho_ventana;
+void igvInterfaz::set_ancho_ventana(int _ancho_ventana)
+{
+    ancho_ventana = _ancho_ventana;
 }
 
 /**
@@ -217,7 +212,7 @@ void igvInterfaz::set_ancho_ventana ( int _ancho_ventana )
  * @pre Se asume que el parámetro tiene un valor válido
  * @post El alto de ventana almacenado en la aplicación cambia al nuevo valor
  */
-void igvInterfaz::set_alto_ventana ( int _alto_ventana )
-{  alto_ventana = _alto_ventana;
+void igvInterfaz::set_alto_ventana(int _alto_ventana)
+{
+    alto_ventana = _alto_ventana;
 }
-

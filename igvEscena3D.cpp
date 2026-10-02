@@ -35,6 +35,25 @@ void igvEscena3D::pintar_ejes()
 
 // Métodos públicos
 
+void igvEscena3D::trasladar(float x, float y, float z)
+{
+    obj[seleccionado].tx+=x;
+    obj[seleccionado].ty+=y;
+    obj[seleccionado].tz+=z;
+}
+
+void igvEscena3D::rotar(float drx, float dry, float drz)
+{
+    obj[seleccionado].rx+=drx;
+    obj[seleccionado].ry+=dry;
+    obj[seleccionado].rz+=drz;
+}
+
+void igvEscena3D::escalar(float factor)
+{
+    obj[seleccionado].s+=factor;
+}
+
 /**
  * Método con las llamadas OpenGL para visualizar la escena
  */
@@ -54,23 +73,42 @@ void igvEscena3D::visualizar(int objeto)
         pintar_ejes();
     }
 
-    // se pintan los objetos de la escena
+    /* ----------- PINTAR OBJETOS --------------
+     *
+     * 1. hago un bucle simple de 3 iteraciones para no tener que pintar los objetos uno a uno
+     *
+     * 2. cada objeto acumula sus propias iteraciones y se les aplica en orden inverso de: ROTACION --> ESCALADA --> TRASLACION
+     *
+     * 3. no olvidar el push y pop matrix para no liarla
+     */
 
-    glPushMatrix();
-    glTranslatef(2,0,2);
-    renderObjeto1();
-    glPopMatrix();
+    for (int i=0; i<3; i++)
+    {
+        glPushMatrix();
 
-    renderObjeto3();
+        //traslaciones
+        glTranslatef(obj[i].tx, obj[i].ty, obj[i].tz);
 
+        //escalados (es uniforme, asi se explica en el ejemplo del pdf)
+        glScalef(obj[i].s, obj[i].s, obj[i].s);
 
-    glPushMatrix();
-    glTranslatef(-4,0,-4);
-    renderObjeto2();
-    glPopMatrix();
+        //rotaciones
+        glRotatef(obj[i].rx,1,0,0);
+        glRotatef(obj[i].ry,0,1,0);
+        glRotatef(obj[i].rz,0,0,1);
 
+        //solo queda dibujar el objeto y el pop()
 
-    glPopMatrix(); // restaura la matriz de modelado
+        switch (i)
+        {
+            case 0: renderObjeto1(); break;
+            case 1: renderObjeto2(); break;
+            case 2: renderObjeto3(); break;
+        }
+
+        glPopMatrix();
+
+    }
 }
 
 /**
@@ -136,15 +174,16 @@ void igvEscena3D::hacerPrismaRampa(float ancho, float alto, float largo) //largo
 }
 
 /**
- * @brief crea un raton de ordenador antiguo en la ventana de visualización
- * @note ¿a que mola?
+ * @brief funcion que renderiza el primer objeto / primera opcion del menú
  */
-void igvEscena3D::crearRaton()
+void igvEscena3D::renderObjeto1() 
 {
     GLfloat gris[] = {0.2, 0.2, 0.2}; //< vector de color RGB (se puede poner 4 elemento para transparencia)
     GLfloat gris_oscuro[] = {0.01,0.01,0.01};
 
     glMaterialfv(GL_FRONT, GL_EMISSION, gris);
+
+    glPushMatrix();
 
     //------------cuerpo------------------
     glPushMatrix();
@@ -162,46 +201,41 @@ void igvEscena3D::crearRaton()
 
     glPushMatrix();
 
-    glTranslatef(0,0.5,-0.5);
-    glRotatef(90,0,1,0);
-    hacerPrismaRampa(2,0.5,1);
+        glTranslatef(0,0.5,-0.5);
+        glRotatef(90,0,1,0);
+        hacerPrismaRampa(2,0.5,1);
+
+        glPopMatrix();
+
+        //frente
+        glMaterialfv(GL_FRONT, GL_EMISSION, gris);
+
+        glPushMatrix();
+
+        glTranslatef(0,0.5,1);
+        glRotatef(-90,0,1,0);
+        hacerPrismaRampa(1,0.5,1);
+
+        glPopMatrix();
+
+        //botones
+
+        glMaterialfv(GL_FRONT, GL_EMISSION, gris_oscuro);
+        glPushMatrix();
+        glTranslatef(0.25,0.30,1);
+        glRotatef(-60,1,0,0);
+        glScalef(0.75,1.25,1);
+        glutSolidCube(0.5);
+        glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-0.25,0.30,1);
+        glRotatef(-60,1,0,0);
+        glScalef(0.75,1.25,1);
+        glutSolidCube(0.5);
+        glPopMatrix();
 
     glPopMatrix();
-
-    //frente
-    glMaterialfv(GL_FRONT, GL_EMISSION, gris);
-
-    glPushMatrix();
-
-    glTranslatef(0,0.5,1);
-    glRotatef(-90,0,1,0);
-    hacerPrismaRampa(1,0.5,1);
-
-    glPopMatrix();
-
-    //botones
-
-    glMaterialfv(GL_FRONT, GL_EMISSION, gris_oscuro);
-    glPushMatrix();
-    glTranslatef(0.25,0.30,1);
-    glRotatef(-60,1,0,0);
-    glScalef(0.75,1.25,1);
-    glutSolidCube(0.5);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslatef(-0.25,0.30,1);
-    glRotatef(-60,1,0,0);
-    glScalef(0.75,1.25,1);
-    glutSolidCube(0.5);
-    glPopMatrix();
-}
-/**
- * @brief funcion que renderiza el primer objeto / primera opcion del menú
- */
-void igvEscena3D::renderObjeto1() 
-{
-    crearRaton();
 }
 
 void igvEscena3D::renderObjeto2()
@@ -234,4 +268,9 @@ bool igvEscena3D::get_ejes()
 void igvEscena3D::set_ejes(bool _ejes)
 {
     ejes = _ejes;
+}
+
+void igvEscena3D::set_seleccionado(const int seleccionado)
+{
+    this->seleccionado = seleccionado;
 }

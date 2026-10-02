@@ -50,7 +50,7 @@ private:
     // Aplicación del patrón Singleton
     static igvInterfaz* _instancia; ///< Puntero al objeto único de la clase
     /// Constructor por defecto
-    igvInterfaz();
+    igvInterfaz() = default;
 
 public:
     static igvInterfaz& getInstancia();

@@ -12,6 +12,16 @@
 #endif   // defined(__APPLE__) && defined(__MACH__)
 
 /**
+ * Una forma de guardar las transformaciones acumuladas de los objetos
+ */
+struct Transformaciones
+{
+    float tx = 0, ty = 0, tz = 0; ///< traslacion acumulada
+    float rx=0, ry=0, rz = 0; ///< ángulos acumulados (en grados)
+    float s=1; ///< escala acumulada
+};
+
+/**
  * Los objetos de esta clase representan escenas 3D para su visualización
  */
 class igvEscena3D
@@ -25,6 +35,9 @@ private:
     // Atributos
     bool ejes = true; ///< Indica si hay que dibujar los _ejes coordenados o no
 
+    Transformaciones obj[3];
+    int seleccionado = 0;
+
 public:
     // Constructores por defecto y destructor
     /// Constructor por defecto
@@ -33,14 +46,20 @@ public:
     ~igvEscena3D() = default;
 
     // Métodos
+    void trasladar(float x, float y, float z);
+    void rotar(float drx, float dry, float drz);
+    void escalar(float factor);
+
+
     // método con las llamadas OpenGL para visualizar la escena
     void visualizar(int objeto);
     void hacerPrismaRampa(float ancho, float alto, float largo);
-    void crearRaton();
 
     bool get_ejes();
-
     void set_ejes(bool _ejes);
+
+    void set_seleccionado(int seleccionado);
+
 
 private:
     void renderObjeto1();
