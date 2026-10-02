@@ -181,7 +181,47 @@ void igvEscena3D::renderObjeto1() //todo DUDA: glutSwapBuffers() y glFlush() QUE
 
 void igvEscena3D::renderObjeto2()
 {
-    glutSolidCube(2);
+    //Color/255
+    GLfloat marron[] {0.57, 0.27, 0};
+
+    //Tabla
+    glMaterialfv(GL_FRONT,GL_EMISSION, marron);
+    glPushMatrix();
+
+    glTranslatef(0,1.5,0);
+    glScalef(2,0.25,1.5);
+    glutSolidCube(1);
+
+    glPopMatrix();
+
+
+    //Patas
+    glPushMatrix();
+    glTranslatef(-0.875,0.75,0.625);  //se mueve el centro del objeto
+    glScalef(0.25,1.5,0.25);
+    glutSolidCube(1);
+    glPopMatrix();
+
+
+    glPushMatrix();
+    glTranslatef(-0.875,0.75,-0.625);
+    glScalef(0.25,1.5,0.25);
+    glutSolidCube(1);
+    glPopMatrix();
+
+
+    glPushMatrix();
+    glTranslatef(0.875,0.75,0.625);
+    glScalef(0.25,1.5,0.25);
+    glutSolidCube(1);
+    glPopMatrix();
+
+
+    glPushMatrix();
+    glTranslatef(0.875,0.75,-0.625);
+    glScalef(0.25,1.5,0.25);
+    glutSolidCube(1);
+    glPopMatrix();
 }
 
 void igvEscena3D::renderObjeto3()
