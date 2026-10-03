@@ -71,7 +71,6 @@ void igvInterfaz::configura_entorno ( int argc, char **argv, int _ancho_ventana
    glutInitWindowPosition ( _pos_X, _pos_Y );
    glutCreateWindow ( _titulo.c_str () );
 
-   create_menu();
 
    glEnable ( GL_DEPTH_TEST ); // activa el ocultamiento de superficies por z-buffer
    glClearColor ( 1.0, 1.0, 1.0, 0.0 ); // establece el color de fondo de la ventana
@@ -82,18 +81,6 @@ void igvInterfaz::configura_entorno ( int argc, char **argv, int _ancho_ventana
    crear_mundo (); // crea el mundo a visualizar en la ventana
 }
 
-void igvInterfaz::create_menu()
-{
-   int menu_id = glutCreateMenu(menuHandle);
-   glutAddMenuEntry(_instancia->escena.Nombre_EscenaA
-                    , _instancia->escena.Objeto1);
-   glutAddMenuEntry(_instancia->escena.Nombre_EscenaB
-                    , _instancia->escena.Objeto2);
-   glutAddMenuEntry(_instancia->escena.Nombre_EscenaC
-                    , _instancia->escena.Objeto3);
-
-   glutAttachMenu(GLUT_RIGHT_BUTTON);
-}
 
 /**
  * Método para visualizar la escena y esperar a eventos sobre la interfaz
@@ -151,9 +138,79 @@ void igvInterfaz::keyboardFunc ( unsigned char key, int x, int y )
       case 27: // tecla de escape para SALIR
          exit ( 1 );
          break;
+
+      case '1':
+      case '2':
+      case '3':
+         _instancia->escena.set_seleccionado(key - '1'); ///<- "key" es ASCII, le resto "1" para transformalo
+           break;
+      case 'u': // Traslacion en Y positiva
+         _instancia->escena.trasladar(0,0.5,0);
+           break;
+      case 'U': // Traslacion en Y negativa
+         _instancia->escena.trasladar(0,-0.5,0);
+           break;
+
+
+      // Rotacion en X
+       case 'x':
+          _instancia->escena.rotar(5,0,0);
+          break;
+       case 'X':
+          _instancia->escena.rotar(-5,0,0);
+
+
+      // Rotacion en Y
+       case 'y':
+          _instancia->escena.rotar(0,5,0);
+          break;
+       case 'Y':
+          _instancia->escena.rotar(0,-5,0);
+
+
+      //Rotacion en Z
+       case 'z':
+          _instancia->escena.rotar(0,0,5);
+          break;
+       case 'Z':
+          _instancia->escena.rotar(0,0,-5);
+          break;
+
+
+       case 's':
+          _instancia->escena.escalar(1.5);
+          break;
+       case 'S':
+          _instancia->escena.escalar(0.5);
+          break;
+
+
+
    }
    glutPostRedisplay (); // renueva el contenido de la ventana de vision y redibuja la escena
 }
+
+
+void igvInterfaz::specialFunc(int key, int x, int y)
+{
+   switch (key)
+   {
+      case GLUT_KEY_LEFT:
+         _instancia->escena.trasladar(0.5,0,0); break;
+      case GLUT_KEY_RIGHT:
+         _instancia->escena.trasladar(-0.5,0,0); break;
+
+      // Traslacion en Z
+      case GLUT_KEY_UP:
+         _instancia->escena.trasladar(0,0,0.5);
+           break;
+      case GLUT_KEY_DOWN:
+         _instancia->escena.trasladar(0,0,-0.5);
+           break;
+   }
+   glutPostRedisplay(); // renueva el contenido de la ventana de vision y redibuja la escena
+}
+
 
 /**
  * Método que define la cámara de visión y el viewport. Se llama automáticamente
@@ -193,21 +250,13 @@ void igvInterfaz::displayFunc ()
  */
 void igvInterfaz::inicializa_callbacks ()
 {  glutKeyboardFunc ( keyboardFunc );
+   glutSpecialFunc(specialFunc);
    glutReshapeFunc ( reshapeFunc );
    glutDisplayFunc ( displayFunc );
+
 }
 
-/**
- * Método para gestionar la selección de opciones de menú
- * @param value Nueva opción seleccionada
- * @pre Se asume que el valor del parámetro es correcto
- * @post Se almacena en el objeto la opción seleccionada
- */
-void igvInterfaz::menuHandle(int value)
-{
-   _instancia->menuSelection = value;
-   glutPostRedisplay(); // renew the content of the window
-}
+
 
 /**
  * Método para consultar el ancho de la ventana de visualización

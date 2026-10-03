@@ -65,6 +65,7 @@ public:
     // se llama automáticamente cuando se cambia el tamaño de la ventana
     static void displayFunc(); // método para visualizar la escena
     static void menuHandle(int value); // método para gestionar la selección de opciones de menú
+    static void specialFunc(int key, int x, int y); //método para control de eventos especiales (NO ASCII)
 
 
     // Métodos

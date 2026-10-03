@@ -35,6 +35,27 @@ void igvEscena3D::pintar_ejes()
 
 // Métodos públicos
 
+void igvEscena3D::trasladar(float x, float y, float z)
+{
+    obj[seleccionado].tx+=x;
+    obj[seleccionado].ty+=y;
+    obj[seleccionado].tz+=z;
+}
+
+void igvEscena3D::rotar(float drx, float dry, float drz)
+{
+    obj[seleccionado].rx+=drx;
+    obj[seleccionado].ry+=dry;
+    obj[seleccionado].rz+=drz;
+}
+
+void igvEscena3D::escalar(float factor)
+{
+    obj[seleccionado].s*=factor;
+}
+
+
+
 /**
  * Método con las llamadas OpenGL para visualizar la escena
  */
@@ -54,20 +75,42 @@ void igvEscena3D::visualizar(int objeto)
         pintar_ejes();
     }
 
-    // se pintan los objetos de la escena
+    /* ----------- PINTAR OBJETOS --------------
+     *
+     * 1. hago un bucle simple de 3 iteraciones para no tener que pintar los objetos uno a uno
+     *
+     * 2. cada objeto acumula sus propias iteraciones y se les aplica en orden inverso de: ROTACION --> ESCALADA --> TRASLACION
+     *
+     * 3. no olvidar el push y pop matrix para no liarla
+     */
 
-    switch (objeto)
+    for (int i=0; i<3; i++)
     {
-    case 1:
-        renderObjeto1();
-        break;
-    case 2:
-        renderObjeto2();
-        break;
-    case 3:
-        renderObjeto3();
-        break;
+        glPushMatrix();
+
+        //traslaciones
+        glTranslatef(obj[i].tx, obj[i].ty, obj[i].tz);
+
+        //escalados (es uniforme, asi se explica en el ejemplo del pdf)
+        glScalef(obj[i].s, obj[i].s, obj[i].s);
+
+        //rotaciones
+        glRotatef(obj[i].rx,1,0,0);
+        glRotatef(obj[i].ry,0,1,0);
+        glRotatef(obj[i].rz,0,0,1);
+
+        //solo queda dibujar el objeto y el pop()
+
+        switch (i)
+        {
+            case 0: renderObjeto1(); break;
+            case 1: renderObjeto2(); break;
+            case 2: renderObjeto3(); break;
+        }
+
+        glPopMatrix();
     }
+
 
 
     glPopMatrix(); // restaura la matriz de modelado
@@ -226,7 +269,38 @@ void igvEscena3D::renderObjeto2()
 
 void igvEscena3D::renderObjeto3()
 {
-    glutSolidCube(3);
+    GLfloat cono[] = {1,0.639,0};
+    glMaterialfv(GL_FRONT,GL_EMISSION, cono);
+    glPushMatrix();
+    glTranslatef(0,1,0);
+    glRotatef(90,1,0,0);
+    glutSolidCone(0.5,2,20,1); //radio, altura
+    glPopMatrix();
+
+
+    GLfloat bola1[] = {0.459,0.302,0.016};
+    glMaterialfv(GL_FRONT,GL_EMISSION, bola1);
+    glPushMatrix();
+    glTranslatef(-0.125,1.1875,0);
+    glutSolidSphere(0.375,20,20); //radio
+    glPopMatrix();
+
+
+    GLfloat bola2[] = {1,0.949,0.863};
+    glMaterialfv(GL_FRONT,GL_EMISSION, bola2);
+    glPushMatrix();
+    glTranslatef(0.125,1.1875,0);
+    glutSolidSphere(0.375,20,20); //radio
+    glPopMatrix();
+
+
+    GLfloat bola3[] = {1,0,0};
+    glMaterialfv(GL_FRONT,GL_EMISSION, bola3);
+    glPushMatrix();
+    glTranslatef(0,1.5625,0);
+    glutSolidSphere(0.375,20,20); //radio
+    glPopMatrix();
+
 }
 
 
@@ -249,4 +323,9 @@ bool igvEscena3D::get_ejes()
 void igvEscena3D::set_ejes(bool _ejes)
 {
     ejes = _ejes;
+}
+
+void igvEscena3D::set_seleccionado(const int seleccionado)
+{
+    this->seleccionado = seleccionado;
 }
