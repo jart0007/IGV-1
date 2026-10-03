@@ -37,7 +37,7 @@ private:
 
     igvEscena3D escena; ///< Escena que se visualiza en la ventana definida por igvInterfaz
 
-    int menuSelection = 0; ///< opción seleccionada del menú
+    bool modoCamara = false; ///< controlar si estoy en el modo camara
 
     igvCamara camara; ///< Cámara que se utiliza para visualizar la escena
 

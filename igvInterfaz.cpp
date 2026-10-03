@@ -112,6 +112,10 @@ void igvInterfaz::keyboardFunc(unsigned char key, int x, int y)
     case 27: // tecla de escape para SALIR
         exit(1);
         break;
+    case 'c': // Alternar entre Modo Objeto y Modo Cámara
+    case 'C':
+        _instancia->modoCamara = !_instancia->modoCamara;
+        break;
 
     //practica 1: transformaciones geometricas
     case '1':
@@ -119,38 +123,133 @@ void igvInterfaz::keyboardFunc(unsigned char key, int x, int y)
     case '3':
         _instancia->escena.set_seleccionado(key - '1'); ///<- "key" es ASCII, le resto "1" para transformalo
         break;
-    case 'u': // Traslacion en Y positiva
-        _instancia->escena.trasladar(0,0.5,0);
+    case 'u':
+        _instancia->escena.trasladar(0, 0.5f, 0);
         break;
-    case 'U': // Traslacion en Y negativa
-        _instancia->escena.trasladar(0,-0.5,0);
+    case 'U':
+        _instancia->escena.trasladar(0, -0.5f, 0);
         break;
 
+    // --- ROTACIÓN EN X ---
+    case 'x':
+        _instancia->escena.rotar(5.0f, 0, 0);
+        break;
+    case 'X':
+        _instancia->escena.rotar(-5.0f, 0, 0);
+        break;
 
+    // --- ROTACIÓN EN Y (DEPENDE DEL MODO) ---
+    case 'y':
+        if (_instancia->modoCamara)
+            _instancia->camara.rotacionY(5.0);
+        else
+            _instancia->escena.rotar(0, 5.0f, 0);
+        break;
+    case 'Y':
+        if (_instancia->modoCamara)
+            _instancia->camara.rotacionY(-5.0);
+        else
+            _instancia->escena.rotar(0, -5.0f, 0);
+        break;
+
+    // --- ROTACIÓN EN Z ---
+    case 'z':
+        _instancia->escena.rotar(0, 0, 5.0f);
+        break;
+    case 'Z':
+        _instancia->escena.rotar(0, 0, -5.0f);
+        break;
+
+    // --- ESCALADO HOMOGÉNEO ---
+    case 's':
+        _instancia->escena.escalar(0.1f);
+        break;
+    case 'S':
+        _instancia->escena.escalar(-0.1f);
+        break;
+
+    // --- RECORTE: PLANO CERCANO (front / near) ---
+    case 'f':
+        _instancia->camara.moverZnear(0.2);
+        break;
+    case 'F':
+        _instancia->camara.moverZnear(-0.2);
+        break;
+
+    // --- RECORTE: PLANO LEJANO (back / far) ---
+    case 'b':
+        _instancia->camara.moverZfar(0.2);
+        break;
+    case 'B':
+        _instancia->camara.moverZfar(-0.2);
+        break;
+
+    // --- ZOOM (Factores inversos 0.95 y 1/0.95) ---
+    case '+':
+        _instancia->camara.zoom(0.95);
+        break;
+    case '-':
+        _instancia->camara.zoom(1.0 / 0.95);
+        break;
+
+    // --- CAMBIAR PROYECCIÓN (Paralela / Perspectiva) ---
+    case 'p':
+    case 'P':
+        if (_instancia->camara.getTipo() == IGV_PARALELA)
+            _instancia->camara.setTipo(IGV_PERSPECTIVA);
+        else
+            _instancia->camara.setTipo(IGV_PARALELA);
+        break;
     }
-    glutPostRedisplay(); // renueva el contenido de la ventana de vision y redibuja la escena
+
+    glutPostRedisplay();
 }
 
 /**
- * Método de control de eventos de teclas especiales, no sirve el metodo de arriba por que algunas teclas no tienen ASCII
- * @param key Código de la tecla pulsada
- * @param x Coordenada X de la posición del cursor del ratón en el momento del
- *          evento de teclado
- * @param y Coordenada Y de la posición del cursor del ratón en el momento del
- *          evento de teclado
- * @pre Se asume que todos los parámetros tienen valores válidos
- * @post Los atributos de la clase pueden cambiar, dependiendo de la tecla pulsada
+ * Control de eventos de teclas especiales (Cursores)
  */
 void igvInterfaz::specialFunc(int key, int x, int y)
 {
-    switch (key)
+    if (_instancia->modoCamara)
     {
-    case GLUT_KEY_LEFT:
-        _instancia->escena.trasladar(-0.5,0,0); break;
-    case GLUT_KEY_RIGHT:
-        _instancia->escena.trasladar(0.5,0,0); break;
+        // --- MODO CÁMARA ---
+        switch (key)
+        {
+        case GLUT_KEY_LEFT:
+            _instancia->camara.orbita(5.0);
+            break;
+        case GLUT_KEY_RIGHT:
+            _instancia->camara.orbita(-5.0);
+            break;
+        case GLUT_KEY_UP:
+            _instancia->camara.cabeceo(5.0);
+            break;
+        case GLUT_KEY_DOWN:
+            _instancia->camara.cabeceo(-5.0);
+            break;
+        }
     }
-    glutPostRedisplay(); // renueva el contenido de la ventana de vision y redibuja la escena
+    else
+    {
+        // --- MODO OBJETO ---
+        switch (key)
+        {
+        case GLUT_KEY_LEFT:
+            _instancia->escena.trasladar(0.5f, 0, 0);
+            break;
+        case GLUT_KEY_RIGHT:
+            _instancia->escena.trasladar(-0.5f, 0, 0);
+            break;
+        case GLUT_KEY_UP:
+            _instancia->escena.trasladar(0, 0, 0.5f);
+            break;
+        case GLUT_KEY_DOWN:
+            _instancia->escena.trasladar(0, 0, -0.5f);
+            break;
+        }
+    }
+
+    glutPostRedisplay();
 }
 
 /**
@@ -181,8 +280,11 @@ void igvInterfaz::displayFunc()
     // se establece el viewport
     glViewport(0, 0, _instancia->get_ancho_ventana(), _instancia->get_alto_ventana());
 
+    //cargar las transformaciones de la camara
+    _instancia->camara.aplicar();
+
     //visualiza la escena
-    _instancia->escena.visualizar(_instancia->menuSelection);
+    _instancia->escena.visualizar();
 
     // refresca la ventana
     glutSwapBuffers(); // se utiliza, en vez de glFlush(), para evitar el parpadeo

@@ -52,7 +52,7 @@ public:
 
 
     // método con las llamadas OpenGL para visualizar la escena
-    void visualizar(int objeto);
+    void visualizar();
     void hacerPrismaRampa(float ancho, float alto, float largo);
 
     bool get_ejes();

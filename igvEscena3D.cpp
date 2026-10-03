@@ -57,7 +57,7 @@ void igvEscena3D::escalar(float factor)
 /**
  * Método con las llamadas OpenGL para visualizar la escena
  */
-void igvEscena3D::visualizar(int objeto)
+void igvEscena3D::visualizar()
 {
     // crear luces
     GLfloat luz0[] = {10, 8, 9, 1}; // luz puntual
