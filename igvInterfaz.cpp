@@ -216,10 +216,10 @@ void igvInterfaz::specialFunc(int key, int x, int y)
         switch (key)
         {
         case GLUT_KEY_LEFT:
-            _instancia->camara.orbita(5.0);
+            _instancia->camara.orbita(-5.0);
             break;
         case GLUT_KEY_RIGHT:
-            _instancia->camara.orbita(-5.0);
+            _instancia->camara.orbita(5.0);
             break;
         case GLUT_KEY_UP:
             _instancia->camara.cabeceo(5.0);
@@ -285,6 +285,11 @@ void igvInterfaz::displayFunc()
 
     //visualiza la escena
     _instancia->escena.visualizar();
+
+    //--para el siguiente viewport
+    /*
+     * glViewport....
+     */
 
     // refresca la ventana
     glutSwapBuffers(); // se utiliza, en vez de glFlush(), para evitar el parpadeo

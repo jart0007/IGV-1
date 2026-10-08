@@ -173,7 +173,7 @@ void igvEscena3D::hacerPrismaRampa(float ancho, float alto, float largo) //largo
 }
 
 /**
- * @brief funcion que renderiza el primer objeto / primera opcion del menú
+ * @brief funcion que renderiza el primer objeto / primera
  */
 void igvEscena3D::renderObjeto1() 
 {
