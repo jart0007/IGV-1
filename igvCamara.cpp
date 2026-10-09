@@ -214,15 +214,18 @@ void igvCamara::cabeceo(double num)
 
    // 4. Nueva altura (Y) y nueva proyección horizontal (R_xz)
    double dy_nuevo = radio * sin(ang_nuevo);
-   double rxz_nuevo = radio * cos(ang_nuevo);
+   double dxz_nuevo = radio * cos(ang_nuevo);
 
    // 5. Mantenemos la dirección horizontal original escalando X y Z proporcionalmente
    // (evita que la cámara se desvíe a los lados)
-   double factor_escala = rxz_nuevo / dxz;
+   double factor_escala = dxz_nuevo / dxz;
 
-   r[X] = P0[X] + dx * factor_escala;
-   r[Y] = P0[Y] + dy_nuevo;
-   r[Z] = P0[Z] + dz * factor_escala;
+   if (!(dxz_nuevo < IGV_EPSILON)) //otra forma de hacer la comparacion: (angulo_nuevo > (89.0*M_PI/180)) y lo mismo para menor que. Para que no pase de 90 grados en vertical el cabeceo de la camara
+   {
+      r[X] = P0[X] + dx * factor_escala;
+      r[Y] = P0[Y] + dy_nuevo;
+      r[Z] = P0[Z] + dz * factor_escala;
+   }///< el if sirve para que si la camara mira en vertical, no se aplica
 }
 
 /**
