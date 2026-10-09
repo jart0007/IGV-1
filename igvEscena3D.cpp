@@ -1,3 +1,7 @@
+/**
+*@authors Juan Antonio Rosell Torres
+ *          Daniel Payer Castro
+ */
 #include <cstdlib>
 #include <stdio.h>
 #include <cmath>

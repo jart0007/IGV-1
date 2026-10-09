@@ -1,3 +1,7 @@
+/**
+*@authors Juan Antonio Rosell Torres
+ *          Daniel Payer Castro
+ */
 #ifndef __IGVCAMARA
 #define __IGVCAMARA
 

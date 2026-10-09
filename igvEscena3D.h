@@ -1,3 +1,7 @@
+/**
+*@authors Juan Antonio Rosell Torres
+ *          Daniel Payer Castro
+ */
 #ifndef __IGVESCENA3D
 #define __IGVESCENA3D
 
