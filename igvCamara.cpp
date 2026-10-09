@@ -130,3 +130,94 @@ void igvCamara::aplicar ()
 void igvCamara::zoom ( double factor )
 {  // TODO: apartado C
 }
+
+bool igvCamara::isCamara() const {
+   return camara;
+}
+
+//Si es true, las transformaciones mueven la cámara
+void igvCamara::setCamara(bool camara) {
+   igvCamara::camara = camara;
+}
+
+void igvCamara::orbitar(float angulo) {
+   //Convertimos el ángulo a radianes
+   float rangulo = (angulo * M_PI)/180;
+
+   //Hacemos el módulo del vector PR
+   double prx = P0[X] - r[X];
+   double prz = P0[Z] - r[Z];
+   double modulopr = sqrt((prx*prx)+(prz*prz));
+
+   double radio = modulopr;
+
+   //Calculamos el ángulo actual de la cámara para que no se quede atascada
+   double angActual = atan2(prx, prz);
+   float nuevoAng = angActual + rangulo;
+
+   P0[X] = r[X] + radio * sin(nuevoAng);
+   P0[Z] = r[Z] + radio * sin(nuevoAng);
+
+   //CAMARA
+   /*
+    * eyex = centerx + radius * sen(ang)
+    * eyez = centerz + radius * cos(ang)
+    * */
+
+
+}
+
+void igvCamara::cabeceo(float angulo) {
+
+
+}
+
+void igvCamara::rotacionY(float angulo) {
+   //Convertimos el ángulo a radianes
+   float rangulo = (angulo * M_PI)/180;
+
+   //Hacemos el módulo del vector PR
+   double prx = P0[X] - r[X];
+   double prz = P0[Z] - r[Z];
+   double modulopr = sqrt((prx*prx)+(prz*prz));
+
+   double radio = modulopr;
+
+   //Calculamos el ángulo actual de la cámara para que no se quede atascada
+   double angActual = atan2(prx, -prz);
+   float nuevoAng = angActual + rangulo;
+
+   r[X] = P0[X] + radio * sin(nuevoAng);
+   r[Z] = P0[Z] + -radio * sin(nuevoAng);
+
+}
+
+
+/* VIEWPORT
+ * glViewPort(x, y, width, height)
+ * (x,y): Esquina inferior izq (normalmente 0,0)
+ * width (ancho) y height (largo): dimensiones pixeles
+ *
+ * -------------------------------
+ * |               |              |
+ * |               |              |
+ * h2------------------------------
+ * |               |              |
+ * |               |              |
+ * |               |              |
+ * ---------------w2----------------
+ *
+ * I1 (abajo izq) = I1(0,0,w2,h2)
+ * D1 (abajo derecha) = D1(w2,0,w2,h2)
+ * I2 (arriba izq) = I2(0,h2,w2,h2)
+ * D2 (arriba der) = D2(w2, h2, w2, h2)
+ * mitad izq = I(0,0, w2, height)
+ * mitad der = D(w2,0, w2, height)
+ *
+ * displayFunc(){
+ *    glViewPort(...) //I1
+ *    instancia -> actualiza_vista();
+ *    instancia -> ecena.visualiza();
+ *
+ *    glViewPort(...) //I2
+ * */

@@ -28,6 +28,8 @@ enum tipoCamara
 class igvCamara
 {  private:
       // atributos
+      bool camara = false;
+
       tipoCamara tipo = IGV_PARALELA;  ///< Tipo de la cámara
 
       // ventana de visión: parámetros proyección paralela y frustum
@@ -86,6 +88,14 @@ class igvCamara
                              // de visión y la transformación de proyección
                              // asociadas a los parámetros de la cámara
       void zoom ( double factor ); // realiza un zoom sobre la cámara
+
+
+      bool isCamara() const;
+      void setCamara(bool camara);
+
+      void orbitar(float angulo);
+      void cabeceo(float angulo);
+      void rotacionY(float angulo);
 };
 
 #endif   // __IGVCAMARA

@@ -104,7 +104,9 @@ void igvInterfaz::keyboardFunc ( unsigned char key, int x, int y )
       de los objetos de la aplicación, pero no hacer llamadas directas a funciones de OpenGL */
 
    switch ( key )
-   {  case 'p': // TODO: cambia el tipo de proyección de paralela a perspectiva y viceversa
+   {
+
+      case 'p': // TODO: cambia el tipo de proyección de paralela a perspectiva y viceversa
 
          break;
       case 'P': // TODO: cambia el tipo de proyección de paralela a perspectiva y viceversa
@@ -139,6 +141,12 @@ void igvInterfaz::keyboardFunc ( unsigned char key, int x, int y )
          exit ( 1 );
          break;
 
+      case 'c':
+      case 'C':
+         _instancia->camara.setCamara(!_instancia->camara.isCamara());
+         break;
+
+
       case '1':
       case '2':
       case '3':
@@ -162,10 +170,19 @@ void igvInterfaz::keyboardFunc ( unsigned char key, int x, int y )
 
       // Rotacion en Y
        case 'y':
-          _instancia->escena.rotar(0,5,0);
-          break;
+          if(_instancia->camara.isCamara()){
+
+          } else {
+             _instancia->escena.rotar(0, 5, 0);
+             break;
+          }
        case 'Y':
-          _instancia->escena.rotar(0,-5,0);
+          if(_instancia->camara.isCamara()){
+
+          } else {
+             _instancia->escena.rotar(0, -5, 0);
+             break;
+          }
 
 
       //Rotacion en Z
@@ -196,17 +213,35 @@ void igvInterfaz::specialFunc(int key, int x, int y)
    switch (key)
    {
       case GLUT_KEY_LEFT:
-         _instancia->escena.trasladar(0.5,0,0); break;
+         if(_instancia->camara.isCamara()){
+
+         } else {
+            _instancia->escena.trasladar(0.5, 0, 0);
+            break;
+         }
       case GLUT_KEY_RIGHT:
-         _instancia->escena.trasladar(-0.5,0,0); break;
+         if(_instancia->camara.isCamara()){
+
+         } else {
+            _instancia->escena.trasladar(-0.5, 0, 0);
+            break;
+         }
 
       // Traslacion en Z
       case GLUT_KEY_UP:
-         _instancia->escena.trasladar(0,0,0.5);
-           break;
+         if(_instancia->camara.isCamara()){
+
+         } else {
+            _instancia->escena.trasladar(0, 0, 0.5);
+            break;
+         }
       case GLUT_KEY_DOWN:
-         _instancia->escena.trasladar(0,0,-0.5);
-           break;
+         if(_instancia->camara.isCamara()){
+
+         } else {
+            _instancia->escena.trasladar(0, 0, -0.5);
+            break;
+         }
    }
    glutPostRedisplay(); // renueva el contenido de la ventana de vision y redibuja la escena
 }
