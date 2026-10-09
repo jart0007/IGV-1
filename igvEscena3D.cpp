@@ -106,8 +106,7 @@ void igvEscena3D::visualizar()
                 case 2: renderObjeto3(); break;
             }
 
-        glPopMatrix();
-    }
+    glPopMatrix(); // restaura la matriz de modelado
 }
 
 /**
@@ -175,7 +174,7 @@ void igvEscena3D::hacerPrismaRampa(float ancho, float alto, float largo) //largo
 /**
  * @brief funcion que renderiza el primer objeto / primera
  */
-void igvEscena3D::renderObjeto1() 
+void igvEscena3D::renderObjeto1()
 {
     GLfloat gris[] = {0.2, 0.2, 0.2}; //< vector de color RGB (se puede poner 4 elemento para transparencia)
     GLfloat gris_oscuro[] = {0.01,0.01,0.01};
@@ -239,12 +238,83 @@ void igvEscena3D::renderObjeto1()
 
 void igvEscena3D::renderObjeto2()
 {
-    glutSolidCube(2);
+    //Color/255
+    GLfloat marron[] {0.57, 0.27, 0};
+
+    //Tabla
+    glMaterialfv(GL_FRONT,GL_EMISSION, marron);
+    glPushMatrix();
+
+    glTranslatef(0,1.5,0);
+    glScalef(2,0.25,1.5);
+    glutSolidCube(1);
+
+    glPopMatrix();
+
+
+    //Patas
+    glPushMatrix();
+    glTranslatef(-0.875,0.75,0.625);  //se mueve el centro del objeto
+    glScalef(0.25,1.5,0.25);
+    glutSolidCube(1);
+    glPopMatrix();
+
+
+    glPushMatrix();
+    glTranslatef(-0.875,0.75,-0.625);
+    glScalef(0.25,1.5,0.25);
+    glutSolidCube(1);
+    glPopMatrix();
+
+
+    glPushMatrix();
+    glTranslatef(0.875,0.75,0.625);
+    glScalef(0.25,1.5,0.25);
+    glutSolidCube(1);
+    glPopMatrix();
+
+
+    glPushMatrix();
+    glTranslatef(0.875,0.75,-0.625);
+    glScalef(0.25,1.5,0.25);
+    glutSolidCube(1);
+    glPopMatrix();
 }
 
 void igvEscena3D::renderObjeto3()
 {
-    glutSolidSphere(1,10,10);
+    GLfloat cono[] = {1,0.639,0};
+    glMaterialfv(GL_FRONT,GL_EMISSION, cono);
+    glPushMatrix();
+    glTranslatef(0,1,0);
+    glRotatef(90,1,0,0);
+    glutSolidCone(0.5,2,20,1); //radio, altura
+    glPopMatrix();
+
+
+    GLfloat bola1[] = {0.459,0.302,0.016};
+    glMaterialfv(GL_FRONT,GL_EMISSION, bola1);
+    glPushMatrix();
+    glTranslatef(-0.125,1.1875,0);
+    glutSolidSphere(0.375,20,20); //radio
+    glPopMatrix();
+
+
+    GLfloat bola2[] = {1,0.949,0.863};
+    glMaterialfv(GL_FRONT,GL_EMISSION, bola2);
+    glPushMatrix();
+    glTranslatef(0.125,1.1875,0);
+    glutSolidSphere(0.375,20,20); //radio
+    glPopMatrix();
+
+
+    GLfloat bola3[] = {1,0,0};
+    glMaterialfv(GL_FRONT,GL_EMISSION, bola3);
+    glPushMatrix();
+    glTranslatef(0,1.5625,0);
+    glutSolidSphere(0.375,20,20); //radio
+    glPopMatrix();
+
 }
 
 
