@@ -40,11 +40,17 @@ private:
     bool modoCamara = false; ///< controlar si estoy en el modo camara
 
     igvCamara camara; ///< Cámara que se utiliza para visualizar la escena
+    igvCamara camaraPlanta; ///< Cámara que visualiza la planta de la escena
 
     // Valores de la vista panorámica
     igvPunto3D p0 = {0, 0, 0} ///< Posición de la cámara
                , r = {0, 0, 0} ///< Punto de referencia para las vistas
                , V = {0, 0, 0} ///< Vector que indica la vertical en la vista
+    ;
+
+    igvPunto3D p0p = {0, 0, 0} ///< Posición de la cámara
+                , rp = {0, 0, 0} ///< Punto de referencia para las vistas
+                , Vp = {0, 0, 0} ///< Vector que indica la vertical en la vista
     ;
 
     // Aplicación del patrón Singleton

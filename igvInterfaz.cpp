@@ -30,11 +30,20 @@ void igvInterfaz::crear_mundo()
 {
     // r tiene valor por defecto (0,0,0)
     // crear cámaras
+
+    //camara general principal
     p0 = igvPunto3D(3.0, 2.0, 4);
     r = igvPunto3D(0, 0, 0);
     V = igvPunto3D(0, 1.0, 0);
 
     _instancia->camara.set(IGV_PARALELA, p0, r, V, -1 * 3, 1 * 3, -1 * 3, 1 * 3, 1, 200);
+
+    //Camara de perspectiva de planta
+    p0p = igvPunto3D(0, 5, 0);
+    rp = igvPunto3D(0, 0, 0);
+    Vp = igvPunto3D(0, 0, -1);
+
+    _instancia->camaraPlanta.set(IGV_PARALELA, p0p, rp, Vp, -1 * 3, 1 * 3, -1 * 3, 1 * 3, 1, 200);
 
     // Las cámaras se han creado con valores por defecto de 60 grados de apertura
     // y ratio de aspecto 1
@@ -272,6 +281,34 @@ void igvInterfaz::reshapeFunc(int w, int h)
 
 /**
  * Método para visualizar la escena
+ *
+ * glViewPort(x, y, width, height)
+ * (x,y): Esquina inferior izq (normalmente 0,0)
+ * width (ancho) y height (largo): dimensiones pixeles
+ *
+ * -------------------------------
+ * |               |              |
+ * |               |              |
+ * h2------------------------------
+ * |               |              |
+ * |               |              |
+ * |               |              |
+ * ---------------w2----------------
+ *
+ * I1 (abajo izq) = I1(0,0,w2,h2)
+ * D1 (abajo derecha) = D1(w2,0,w2,h2)
+ * I2 (arriba izq) = I2(0,h2,w2,h2)
+ * D2 (arriba der) = D2(w2, h2, w2, h2)
+ * mitad izq = I(0,0, w2, height)
+ * mitad der = D(w2,0, w2, height)
+ *
+ * displayFunc(){
+ *    glViewPort(...) //I1
+ *    instancia -> actualiza_vista();
+ *    instancia -> ecena.visualiza();
+ *
+ *    glViewPort(...) //I2
+ *
  */
 void igvInterfaz::displayFunc()
 {
@@ -286,13 +323,26 @@ void igvInterfaz::displayFunc()
     //visualiza la escena
     _instancia->escena.visualizar();
 
-    //--para el siguiente viewport
-    /*
-     * glViewport....
-     */
+
+
+    glEnable ( GL_SCISSOR_TEST );
+    // borrar solo el recuadro
+    glScissor ( _instancia->get_ancho_ventana() - _instancia->get_ancho_ventana()/3, _instancia->get_alto_ventana() - _instancia->get_alto_ventana()/3, _instancia->get_ancho_ventana()/3, _instancia->get_alto_ventana()/3 );
+
+    glClear ( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glDisable ( GL_SCISSOR_TEST );
+
+    //viewport vista superior (planta) de la escena
+    glViewport(_instancia->get_ancho_ventana()-(_instancia->get_ancho_ventana()/3), _instancia->get_alto_ventana()-(_instancia->get_alto_ventana()/3), _instancia->get_ancho_ventana()/3, _instancia->get_alto_ventana()/3);
+
+    _instancia->camaraPlanta.aplicar();
+    _instancia->escena.visualizar ();
+
 
     // refresca la ventana
     glutSwapBuffers(); // se utiliza, en vez de glFlush(), para evitar el parpadeo
+
+
 }
 
 /**
