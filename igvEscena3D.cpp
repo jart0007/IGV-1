@@ -86,27 +86,28 @@ void igvEscena3D::visualizar()
     {
         glPushMatrix();
 
-            //traslaciones
-            glTranslatef(obj[i].tx, obj[i].ty, obj[i].tz);
+        //traslaciones
+        glTranslatef(obj[i].tx, obj[i].ty, obj[i].tz);
 
-            //escalados (es uniforme, asi se explica en el ejemplo del pdf)
-            glScalef(obj[i].s, obj[i].s, obj[i].s);
+        //escalados (es uniforme, asi se explica en el ejemplo del pdf)
+        glScalef(obj[i].s, obj[i].s, obj[i].s);
 
-            //rotaciones
-            glRotatef(obj[i].rx,1,0,0);
-            glRotatef(obj[i].ry,0,1,0);
-            glRotatef(obj[i].rz,0,0,1);
+        //rotaciones
+        glRotatef(obj[i].rx,1,0,0);
+        glRotatef(obj[i].ry,0,1,0);
+        glRotatef(obj[i].rz,0,0,1);
 
-            //solo queda dibujar el objeto y el pop()
+        //solo queda dibujar el objeto y el pop()
 
-            switch (i)
-            {
-                case 0: renderObjeto1(); break;
-                case 1: renderObjeto2(); break;
-                case 2: renderObjeto3(); break;
-            }
+        switch (i)
+        {
+        case 0: renderObjeto1(); break;
+        case 1: renderObjeto2(); break;
+        case 2: renderObjeto3(); break;
+        }
 
-    glPopMatrix(); // restaura la matriz de modelado
+        glPopMatrix(); // restaura la matriz de modelado
+    }
 }
 
 /**
@@ -115,7 +116,7 @@ void igvEscena3D::visualizar()
  * @param alto del prisma
  * @param largo
  */
-void igvEscena3D::hacerPrismaRampa(float ancho, float alto, float largo) //largo -> eje z, profundidad
+    void igvEscena3D::hacerPrismaRampa(float ancho, float alto, float largo)
 {
     //sacamos las coordenadas
     float x_min = - (ancho / 2.0f);
