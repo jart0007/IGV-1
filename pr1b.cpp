@@ -10,7 +10,7 @@ int main ( int argc, char **argv )
 {  // inicializa la ventana de visualización
    igvInterfaz::getInstancia().configura_entorno ( argc, argv, 500, 500 // tamaño de la ventana
                                                    , 100, 100 // posición de la ventana
-                                                   , "CG&V. Practica 1" // título de la ventana
+                                                   , "pruebecilla para el examen y esas cosas, cabe algo tan grande en un titulo? vamos a verlo" // título de la ventana
                                                  );
 
    // establece las funciones callbacks para la gestión de los eventos

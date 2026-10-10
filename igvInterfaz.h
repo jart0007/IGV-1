@@ -38,24 +38,23 @@ private:
     // Atributos
     int ancho_ventana = 0; ///< Ancho de la ventana de visualización
     int alto_ventana = 0; ///< Alto de la ventana de visualización
+    bool pantallaDividida = false;
 
     igvEscena3D escena; ///< Escena que se visualiza en la ventana definida por igvInterfaz
 
-    bool modoCamara = false; ///< controlar si estoy en el modo camara
 
     igvCamara camara; ///< Cámara que se utiliza para visualizar la escena
-    igvCamara camaraPlanta; ///< Cámara que visualiza la planta de la escena
-
     // Valores de la vista panorámica
+    igvCamara camaraAlzado;
+
     igvPunto3D p0 = {0, 0, 0} ///< Posición de la cámara
                , r = {0, 0, 0} ///< Punto de referencia para las vistas
                , V = {0, 0, 0} ///< Vector que indica la vertical en la vista
     ;
 
-    igvPunto3D p0p = {0, 0, 0} ///< Posición de la cámara
-                , rp = {0, 0, 0} ///< Punto de referencia para las vistas
-                , Vp = {0, 0, 0} ///< Vector que indica la vertical en la vista
-    ;
+    igvPunto3D p0a = {0,0,0}
+    , ra = {0,0,0}
+    , Va = {0,0,0};
 
     // Aplicación del patrón Singleton
     static igvInterfaz* _instancia; ///< Puntero al objeto único de la clase
@@ -71,10 +70,10 @@ public:
     // Métodos estáticos
     // callbacks de eventos
     static void keyboardFunc(unsigned char key, int x, int y); // método para control de eventos del teclado
+    static void specialFunc(int key, int x, int y);
     static void reshapeFunc(int w, int h); // método que define la camara de vision y el viewport
     // se llama automáticamente cuando se cambia el tamaño de la ventana
     static void displayFunc(); // método para visualizar la escena
-    static void specialFunc(int key, int x, int y); //método para control de eventos especiales (NO ASCII)
 
 
     // Métodos

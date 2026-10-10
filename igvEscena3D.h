@@ -15,14 +15,11 @@
 
 #endif   // defined(__APPLE__) && defined(__MACH__)
 
-/**
- * Una forma de guardar las transformaciones acumuladas de los objetos
- */
-struct Transformaciones
+struct transformaciones
 {
-    float tx = 0, ty = 0, tz = 0; ///< traslacion acumulada
-    float rx=0, ry=0, rz = 0; ///< ángulos acumulados (en grados)
-    float s=1; ///< escala acumulada
+    float tx=0,ty=0,tz=0;
+    float rx=0, ry=0, rz=0;
+    float s=1; ///< factor de escalado homogeneo
 };
 
 /**
@@ -31,16 +28,12 @@ struct Transformaciones
 class igvEscena3D
 {
 public:
-    const int Objeto1 = 1; ///< Identificador interno del objeto 1
-    const int Objeto2 = 2; ///< Identificador interno del objeto 2
-    const int Objeto3 = 3; ///< Identificador interno del objeto 3
 
 private:
     // Atributos
     bool ejes = true; ///< Indica si hay que dibujar los _ejes coordenados o no
+    transformaciones transformaciones;
 
-    Transformaciones obj[3];
-    int seleccionado = 0;
 
 public:
     // Constructores por defecto y destructor
@@ -49,27 +42,23 @@ public:
     /// Destructor
     ~igvEscena3D() = default;
 
-    // Métodos
-    void trasladar(float x, float y, float z);
-    void rotar(float drx, float dry, float drz);
-    void escalar(float factor);
+
 
 
     // método con las llamadas OpenGL para visualizar la escena
     void visualizar();
-    void hacerPrismaRampa(float ancho, float alto, float largo);
 
     bool get_ejes();
     void set_ejes(bool _ejes);
+    void trasladar(float x, float y, float z);
+    void rotar(float x, float y, float z);
+    void escalar(float factor);
 
-    void set_seleccionado(int seleccionado);
 
 
 private:
-    void renderObjeto1();
-    void renderObjeto2();
-    void renderObjeto3();
     void pintar_ejes();
+    void pintaArbol();
 };
 
 #endif   // __IGVESCENA3D
